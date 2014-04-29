@@ -57,19 +57,19 @@ public class Fragment extends Rooted {
 			List<String> res = extractTo.extract(subRoot, context);
 			if (res != null) {
 				Field field = extractTo.getField();
-				StringBuilder fieldValue = new StringBuilder();
-				join(fieldValue, res);
 				if (field.isMulti()) {
 					Object values = extractedDoc.getField(field.getName());
 					if (values != null) {
-						((List<String>) values).add(fieldValue.toString());
+						((List<String>) values).addAll(res);
 					} else {
-						List<String> fieldValueList = new ArrayList<>();
-						fieldValueList.add(fieldValue.toString());
+						List<String> fieldValueList = new ArrayList<>(res);
 						extractedDoc.addField(field.getName(), fieldValueList);
 					}
-				} else
+				} else {
+					StringBuilder fieldValue = new StringBuilder();
+					join(fieldValue, res);
 					extractedDoc.addField(field.getName(), fieldValue.toString());
+				}
 			}
 		}
 	}
